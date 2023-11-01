@@ -18,6 +18,7 @@ export default function MyApp(props) {
       </Head>
       {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
       <CssBaseline />
+      <h1>dsfdsfds</h1>
       <Component {...pageProps} />
     </CacheProvider>
   );

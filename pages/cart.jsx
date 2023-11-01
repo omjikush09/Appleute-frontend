@@ -16,31 +16,30 @@ const Cart = () => {
 
   const { creatingOrder, orderCreated } = values;
 
-  const fetchProducts = async () => {
-    const userId = localStorage.getItem("userId");
-    const jwtToken = JSON.parse(localStorage.getItem("token"));
-    if (!userId || !jwtToken) {
-      router.push("/login");
-      return;
-    }
-
-    try {
-      const { data } = await backend.get(`/cart/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
-        },
-      });
-
-      setProducts(data.data.products);
-    } catch (error) {
-      console.log(error);
-      setError(true);
-    }
-  };
-
   useEffect(() => {
+    const fetchProducts = async () => {
+      const userId = localStorage.getItem("userId");
+      const jwtToken = JSON.parse(localStorage.getItem("token"));
+      if (!userId || !jwtToken) {
+        router.push("/login");
+        return;
+      }
+
+      try {
+        const { data } = await backend.get(`/cart/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
+
+        setProducts(data.data.products);
+      } catch (error) {
+        console.log(error);
+        setError(true);
+      }
+    };
     fetchProducts().then(console.log("hefefefef", products));
-  }, []);
+  }, [products, router]);
 
   const createOrder = async () => {
     console.log("createORder");

@@ -9,32 +9,33 @@ const Order = () => {
   const router = useRouter();
   const [orders, setOrders] = useState(null);
   const [error, setError] = useState(false);
-  const fetchProducts = async () => {
-    const userId = localStorage.getItem("userId");
-    const jwtToken = JSON.parse(localStorage.getItem("token"));
-    if (!userId || !jwtToken) {
-      router.push("/login");
-      return;
-    }
-    try {
-      console.log("hefefefef api...");
-      const { data } = await backend.get(`/orders/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
-        },
-      });
-      console.log(data);
-      setOrders(data.data);
-    } catch (error) {
-      console.log(error);
-
-      setError(true);
-    }
-  };
-
+ 
   useEffect(() => {
+     const fetchProducts = async () => {
+       const userId = localStorage.getItem("userId");
+       const jwtToken = JSON.parse(localStorage.getItem("token"));
+       if (!userId || !jwtToken) {
+         router.push("/login");
+         return;
+       }
+       try {
+         console.log("hefefefef api...");
+         const { data } = await backend.get(`/orders/${userId}`, {
+           headers: {
+             Authorization: `Bearer ${jwtToken}`,
+           },
+         });
+         console.log(data);
+         setOrders(data.data);
+       } catch (error) {
+         console.log(error);
+
+         setError(true);
+       }
+     };
+
     fetchProducts().then(console.log("orders", orders));
-  }, []);
+  }, [orders, router]);
 
   const loading = () => {
     if (error) {

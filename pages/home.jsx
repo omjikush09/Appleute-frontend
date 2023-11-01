@@ -22,7 +22,7 @@ const Home = () => {
 
   useEffect(() => {
     fetchProducts().then(console.log("hefefefef", products));
-  }, []);
+  }, [products]);
 
   const loading = () => {
     if (error) {

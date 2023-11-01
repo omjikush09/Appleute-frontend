@@ -1,11 +1,11 @@
 import DrawerAppBar from "@/components/Dashboard";
-import React, { useState } from "react";
+import React, { useState,useRef } from "react";
 import { Container, TextField, Grid, Button, Typography } from "@mui/material";
 import backend from "@/utils/axios";
-import { useRouter } from "next/router";
-
+import ReCAPTCHA from "react-google-recaptcha";
 const Login = () => {
-  const router = useRouter();
+
+  const reRef = useRef();
   const [values, setValues] = useState({
     email: "omjikush09@gmail.com",
     password: "232343",
@@ -19,11 +19,19 @@ const Login = () => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
+  // const onChange = (value) => {
+  //   console.log("Captcha value:", value);
+  // };
+
   const onSubmit = async (e) => {
+    const token = await reRef.current.executeAsync();
+      reRef.current.reset();
+      console.log(token);
     try {
       const { data } = await backend.post("/login", {
         email,
         password,
+        token,
       });
       console.log(data);
       localStorage.setItem("token", JSON.stringify(data.jwtToken));
@@ -31,17 +39,17 @@ const Login = () => {
       localStorage.setItem("userId", data.user.id);
       setValues({
         ...values,
-        success: "Login Success redirect in 2sec",
+        success: data.message,
         error: "",
         email: "",
         password: "",
       });
 
-      setTimeout(() => {
-        router.push("/home");
-      }, 2000);
+      // setTimeout(() => {
+      //   router.push("/home");
+      // }, 2000);
     } catch (error) {
-      setValues({ ...values, error: "Something went wrong", success: "" });
+      // setValues({ ...values, error: "Something went wrong", success: "" });
     }
   };
 
@@ -111,6 +119,11 @@ const Login = () => {
           </Grid>
         </Grid>
       </Container>
+      <ReCAPTCHA
+        sitekey={process.env.NEXT_PUBLIC_SITE_KEY}
+        size="invisible"
+        ref={reRef}
+      />
     </>
   );
 };
