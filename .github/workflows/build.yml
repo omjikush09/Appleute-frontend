@@ -23,6 +23,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: test
+        run: ls
       - uses: actions-hub/kubectl@master
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
